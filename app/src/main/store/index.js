@@ -7,7 +7,7 @@ const fs = require('fs')
  * @param  {Function} cb
  */
 export const storeTasks = function (data, cb) {
-  fs.writeFile('./store.json', JSON.stringify(data), (err) => {
+  fs.writeFile('./store.json', data, (err) => {
     if (err) {
       return cb({
         status: false,

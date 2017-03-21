@@ -28,6 +28,8 @@
 </template>
 <script>
 import store from 'renderer/vuex/store'
+import './public/css/icon'
+
 export default {
   store,
   data () {
@@ -56,5 +58,3 @@ export default {
   }
 }
 </script>
-<style>
-</style>
