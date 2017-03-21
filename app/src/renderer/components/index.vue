@@ -21,6 +21,41 @@
       </md-table-body>
     </md-table>
     <md-table-pagination md-size="10" :md-total="taskNum" :md-page="page" md-label="Rows" md-separator="of" :md-page-options="false" @pagination="onPagination"></md-table-pagination>
+    <md-speed-dial md-open="hover" md-direction="right" class="md-fab-bottom-left table-actions" md-theme="light-blue">
+      <md-button class="md-fab md-mini" md-fab-trigger>
+        <md-icon md-icon-morph>event</md-icon>
+        <md-icon>add</md-icon>
+      </md-button>
+      <md-button class="md-fab md-primary md-mini md-clean" id="fab" @click.native="openDialog('dialog2')">
+        <md-icon>note_add</md-icon>
+      </md-button>
+      <md-button class="md-fab md-primary md-mini md-clean">
+        <md-icon>email</md-icon>
+      </md-button>
+    </md-speed-dial>
+    <md-dialog md-open-from="#fab" md-close-to="#fab" ref="dialog2">
+      <md-dialog-title>创建新项目</md-dialog-title>
+      <md-dialog-content>
+        <form>
+          <md-input-container>
+            <label>项目名称</label>
+            <md-input></md-input>
+          </md-input-container>
+          <md-input-container>
+            <label>版本</label>
+            <md-input></md-input>
+          </md-input-container>
+          <md-input-container>
+            <label>备注</label>
+            <md-textarea></md-textarea>
+          </md-input-container>
+        </form>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button class="md-primary" @click.native="closeDialog('dialog2')">取消</md-button>
+        <md-button class="md-primary" @click.native="closeDialog('dialog2')">确认</md-button>
+      </md-dialog-actions>
+    </md-dialog>
   </md-table-card>
 </template>
 <script>
@@ -89,86 +124,6 @@ export default {
         remarks: '',
         completed: false,
         lastModified: 1489906513106
-      }, {
-        tid: 100000000005,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: true,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000006,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000007,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000008,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000009,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000010,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000011,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000012,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000013,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000014,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
       }]
     }
   },
@@ -200,6 +155,12 @@ export default {
       const index = project.findIndex((item) => item.tid === tid)
       const completed = project[index].completed
       this.project[index].completed = !completed
+    },
+    openDialog (ref) {
+      this.$refs[ref].open()
+    },
+    closeDialog (ref) {
+      this.$refs[ref].close()
     }
   }
 }
@@ -213,5 +174,9 @@ export default {
   &[completed] {
     background-color: #efefef;
   }
+}
+
+.table-actions.md-fab-bottom-left {
+  bottom: 8px;
 }
 </style>
