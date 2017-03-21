@@ -15,3 +15,7 @@ export const sendMail = ({ commit }, data) => {
     commit(types.SEND_MAIL, rst)
   })
 }
+
+export const resetMail = ({ commit }) => {
+  commit(types.RESET_MAIL)
+}

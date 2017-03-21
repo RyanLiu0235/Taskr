@@ -92,7 +92,10 @@
     <md-dialog ref="dialog-mail" class="dialog-mail">
       <md-dialog-title>{{dialogMailTitle}}</md-dialog-title>
       <template v-if="mailNotify">
-        <md-dialog-content>
+        <md-dialog-content v-if="!mailSuccess">
+          <p>请稍后再试，或者检查一下配置</p>
+        </md-dialog-content>
+        <md-dialog-content v-else>
           <div v-if="mailResult.accepted.count > 0">
             <p>发送成功：</p>
             <p v-for="accepter in mailResult.accepted.detail">{{accepter}}</p>
@@ -231,6 +234,9 @@ export default {
       this.$refs[ref].open()
     },
     closeDialog (ref) {
+      if (ref === 'dialog-mail') {
+        this.$store.dispatch('resetMail')
+      }
       this.$refs[ref].close()
     },
     confirmDialog (ref) {
@@ -302,7 +308,7 @@ export default {
 
 .dialog-mail {
   .md-spinner {
-    margin: 0 auto;
+    margin: 0 auto 20px;
   }
 }
 </style>
