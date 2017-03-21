@@ -1,4 +1,5 @@
 import * as types from '../mutation-types'
+import { ipcRenderer } from 'electron'
 
 const state = {
   projects: [{
@@ -118,6 +119,8 @@ const mutations = {
       project,
       ...projects.slice(index + 1)
     ]
+
+    ipcRenderer.send('updateProjects', state)
   },
   [types.ADD_PROJECT] (state, data) {
     const temp = data.data
@@ -128,6 +131,8 @@ const mutations = {
       temp,
       ...state.projects
     ]
+
+    ipcRenderer.send('updateProjects', state)
   }
 }
 

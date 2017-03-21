@@ -118,12 +118,20 @@
       <md-button class="md-accent" md-theme="light-blue" @click.native="$refs.snackbar.close()">关闭</md-button>
     </md-snackbar>
     <!-- 小提示 end -->
+    <!-- 弹窗提示 start -->
+    <md-dialog-alert :md-content="alertData.content" :md-ok-text="alertData.ok" ref="alert-save">
+    </md-dialog-alert>
+    <!-- 弹窗提示 end -->
   </md-table-card>
 </template>
 <script>
 import {
   mapGetters
 } from 'vuex'
+import {
+  ipcRenderer
+} from 'electron'
+
 export default {
   name: 'index-page',
   data () {
@@ -137,6 +145,10 @@ export default {
         version: '',
         progress: '',
         remarks: ''
+      },
+      alertData: {
+        content: '出错啦',
+        ok: '确认'
       },
       th: [{
         name: '项目',
@@ -158,6 +170,17 @@ export default {
         width: 85
       }]
     }
+  },
+  mounted () {
+    ipcRenderer.on('projectResult', (e, rst) => {
+      // eslint-disable-next-line no-console
+      console.log(rst)
+
+      if (!rst.status) {
+        this.alertData.content = rst.data
+        this.$refs['alert-save'].open()
+      }
+    })
   },
   computed: {
     taskNum () {

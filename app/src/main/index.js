@@ -1,5 +1,6 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import mailer from './mail'
+import store from './store'
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
@@ -21,9 +22,17 @@ function createWindow () {
     mainWindow = null
   })
 
+  // 发送邮件事件
   ipcMain.on('sendMail', (e, data) => {
     mailer(data, (info) => {
       e.sender.send('mailResult', info)
+    })
+  })
+
+  // 更新本地task记录事件
+  ipcMain.on('updateProjects', (e, data) => {
+    store(data, (info) => {
+      e.sender.send('projectResult', info)
     })
   })
 }
