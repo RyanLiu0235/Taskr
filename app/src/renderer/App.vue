@@ -36,6 +36,10 @@ export default {
         link: 'index-page',
         icon: 'toc',
         name: '周报'
+      }, {
+        link: 'setting-page',
+        icon: 'settings',
+        name: '设置'
       }]
     }
   },
