@@ -6,6 +6,7 @@
 
 * 本地任务管理
 * 自动整理、发送周报，支持自定义邮件meta信息
+* Material Design 
 
 ## Build Setup
 
