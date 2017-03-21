@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-export default function (data, cb) {
+export const storeTasks = function (data, cb) {
   fs.writeFile('./store.json', JSON.stringify(data), (err) => {
     if (err) {
       return cb({
@@ -9,5 +9,20 @@ export default function (data, cb) {
       })
     }
     return cb({ status: true })
+  })
+}
+
+export const getTasks = function () {
+  fs.readFile('./store.json', 'utf8', (err, data) => {
+    if (err) {
+      return {
+        status: false,
+        data: err
+      }
+    }
+    return {
+      status: true,
+      data
+    }
   })
 }

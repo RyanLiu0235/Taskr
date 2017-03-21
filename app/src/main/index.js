@@ -1,8 +1,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import mailer from './mail'
-import store from './store'
+import { storeTasks, getTasks } from './store'
 
 let mainWindow
+let tasks
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:${require('../../../config').port}`
   : `file://${__dirname}/index.html`
@@ -22,6 +23,13 @@ function createWindow () {
     mainWindow = null
   })
 
+  ipcMain.on('getTasks', (e, data) => {
+    // 获取本地的任务
+    tasks = getTasks()
+
+    e.sender.send('tasksResult', tasks)
+  })
+
   // 发送邮件事件
   ipcMain.on('sendMail', (e, data) => {
     mailer(data, (info) => {
@@ -31,7 +39,7 @@ function createWindow () {
 
   // 更新本地task记录事件
   ipcMain.on('updateProjects', (e, data) => {
-    store(data, (info) => {
+    storeTasks(data, (info) => {
       e.sender.send('projectResult', info)
     })
   })
