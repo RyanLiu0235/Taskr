@@ -3,6 +3,7 @@ import * as types from '../mutation-types'
 const state = {
   projects: [{
     tid: 100000000000,
+    createdAt: 1489990634917,
     name: '项目1',
     version: 'v5.8.6',
     progress: '100%',
@@ -11,6 +12,7 @@ const state = {
     lastModified: 1489906513106
   }, {
     tid: 100000000001,
+    createdAt: 1489990634917,
     name: '项目2',
     version: 'v5.8.6',
     progress: '100%',
@@ -19,6 +21,7 @@ const state = {
     lastModified: 1489906513106
   }, {
     tid: 100000000002,
+    createdAt: 1489990634917,
     name: '项目3',
     version: 'v5.8.6',
     progress: '100%',
@@ -27,6 +30,7 @@ const state = {
     lastModified: 1489906513106
   }, {
     tid: 100000000003,
+    createdAt: 1489990634917,
     name: '项目4',
     version: 'v5.8.6',
     progress: '100%',
@@ -35,6 +39,7 @@ const state = {
     lastModified: 1489906513106
   }, {
     tid: 100000000022,
+    createdAt: 1489990634917,
     name: '项目5',
     version: 'v5.8.6',
     progress: '100%',
@@ -43,6 +48,7 @@ const state = {
     lastModified: 1489906513106
   }, {
     tid: 100000000004,
+    createdAt: 1489990634917,
     name: '项目6',
     version: 'v5.8.6',
     progress: '100%',
@@ -51,6 +57,7 @@ const state = {
     lastModified: 1489906513106
   }, {
     tid: 100000000020,
+    createdAt: 1489990634917,
     name: '项目7',
     version: 'v5.8.6',
     progress: '100%',
@@ -59,6 +66,7 @@ const state = {
     lastModified: 1489906513106
   }, {
     tid: 100000000021,
+    createdAt: 1489990634917,
     name: '项目8',
     version: 'v5.8.6',
     progress: '100%',
@@ -67,6 +75,7 @@ const state = {
     lastModified: 1489906513106
   }, {
     tid: 100000000023,
+    createdAt: 1489990634917,
     name: '项目8',
     version: 'v5.8.6',
     progress: '100%',
@@ -75,6 +84,7 @@ const state = {
     lastModified: 1489906513106
   }, {
     tid: 100000000024,
+    createdAt: 1489990634917,
     name: '项目10',
     version: 'v5.8.6',
     progress: '100%',

@@ -13,7 +13,17 @@
           <md-table-cell>{{row.version}}</md-table-cell>
           <md-table-cell>{{row.progress}}</md-table-cell>
           <md-table-cell>{{row.remarks}}</md-table-cell>
-          <md-table-cell>{{row.lastModified | formatTime}}</md-table-cell>
+          <md-table-cell>
+            <span>
+              {{row.createdAt | getDate}}
+              <md-tooltip md-delay="1000" md-direction="bottom">{{row.createdAt | getTime}}</md-tooltip>
+            </span>
+            -
+            <span>
+              {{row.lastModified | getDate}}
+              <md-tooltip md-delay="1000" md-direction="bottom">{{row.lastModified | getTime}}</md-tooltip>
+            </span>
+          </md-table-cell>
           <md-table-cell class="project-action">
             <md-menu md-size="3">
               <md-button class="md-icon-button" md-menu-trigger>
@@ -118,7 +128,7 @@ export default {
         name: '备注',
         width: 240
       }, {
-        name: '最后操作时间',
+        name: '创建/最后操作时间',
         width: 125
       }, {
         name: '操作',
@@ -143,8 +153,11 @@ export default {
     ])
   },
   filters: {
-    formatTime (time) {
-      return new Date(time).toLocaleString()
+    getDate (time) {
+      return new Date(time).toLocaleDateString()
+    },
+    getTime (time) {
+      return new Date(time).toLocaleTimeString()
     }
   },
   methods: {
@@ -202,6 +215,7 @@ export default {
 
       switch (state) {
         case 'new':
+          data.createdAt = data.lastModified
           this.$store.dispatch('addProject', {
             tid,
             data
