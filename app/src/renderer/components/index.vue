@@ -7,14 +7,15 @@
         </md-table-row>
       </md-table-header>
       <md-table-body>
-        <md-table-row v-for="(row, index) in projects" :key="index">
+        <md-table-row v-for="(row, index) in projects" :key="index" :completed="row.completed" class="project-row">
           <md-table-cell>{{row.name}}</md-table-cell>
           <md-table-cell>{{row.version}}</md-table-cell>
           <md-table-cell>{{row.progress}}</md-table-cell>
           <md-table-cell>{{row.remarks}}</md-table-cell>
           <md-table-cell>{{row.lastModified | formatTime}}</md-table-cell>
-          <md-table-cell>
-            <md-button class="md-raised md-accent">完成</md-button>
+          <md-table-cell class="has-ripple blue" @click.native="toggleTask(row.tid)">
+            <md-ink-ripple />
+            <md-icon class="check-task">{{row.completed ? 'clear': 'done'}}</md-icon>
           </md-table-cell>
         </md-table-row>
       </md-table-body>
@@ -49,113 +50,124 @@ export default {
         width: 85
       }],
       project: [{
+        tid: 100000000000,
         name: '项目1啊啊啊啊啊啊项目1啊啊啊啊啊啊',
         version: 'v5.8.6',
         progress: '100%',
-        remarks: '了；啊是建档立卡就算了大富科技啊是了；啊是建档' +
-          '啊是建档立卡就算了大富科技啊是',
+        remarks: '了；啊是建档立卡就算了大富科技啊是了；啊是建档',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000001,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000002,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000003,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000004,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000005,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: true,
         lastModified: 1489906513106
       }, {
+        tid: 100000000006,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000007,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000008,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000009,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000010,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000011,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000012,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000013,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }, {
+        tid: 100000000014,
         name: '项目1',
         version: 'v5.8.6',
         progress: '100%',
         remarks: '',
-        lastModified: 1489906513106
-      }, {
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        lastModified: 1489906513106
-      }, {
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        lastModified: 1489906513106
-      }, {
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
+        completed: false,
         lastModified: 1489906513106
       }]
     }
@@ -182,9 +194,24 @@ export default {
     onPagination (arg) {
       this.page = arg.page
       this.size = arg.size
+    },
+    toggleTask (tid) {
+      const project = this.project
+      const index = project.findIndex((item) => item.tid === tid)
+      const completed = project[index].completed
+      this.project[index].completed = !completed
     }
   }
 }
 </script>
-<style>
+<style lang="less">
+.check-task {
+  cursor: pointer;
+}
+
+.project-row {
+  &[completed] {
+    background-color: #efefef;
+  }
+}
 </style>
