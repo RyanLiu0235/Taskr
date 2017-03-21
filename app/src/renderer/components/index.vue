@@ -13,27 +13,36 @@
           <md-table-cell>{{row.progress}}</md-table-cell>
           <md-table-cell>{{row.remarks}}</md-table-cell>
           <md-table-cell>{{row.lastModified | formatTime}}</md-table-cell>
-          <md-table-cell class="has-ripple blue" @click.native="toggleTask(row.tid)">
-            <md-ink-ripple />
-            <md-icon class="check-task">{{row.completed ? 'clear': 'done'}}</md-icon>
+          <md-table-cell class="project-action">
+            <md-menu md-size="3">
+              <md-button class="md-icon-button" md-menu-trigger>
+                <md-icon>more_vert</md-icon>
+              </md-button>
+              <md-menu-content>
+                <md-menu-item @click.native="toggleTask(row.tid)">
+                  <md-icon>{{row.completed ? 'clear': 'done'}}</md-icon>
+                  <span>{{row.completed ? '取消': '完成'}}</span>
+                </md-menu-item>
+                <md-menu-item>
+                  <md-icon>mode_edit</md-icon>
+                  <span>编辑</span>
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
           </md-table-cell>
         </md-table-row>
       </md-table-body>
     </md-table>
     <md-table-pagination md-size="10" :md-total="taskNum" :md-page="page" md-label="Rows" md-separator="of" :md-page-options="false" @pagination="onPagination"></md-table-pagination>
-    <md-speed-dial md-open="hover" md-direction="right" class="md-fab-bottom-left table-actions" md-theme="light-blue">
-      <md-button class="md-fab md-mini" md-fab-trigger>
-        <md-icon md-icon-morph>event</md-icon>
-        <md-icon>add</md-icon>
-      </md-button>
-      <md-button class="md-fab md-primary md-mini md-clean" id="fab" @click.native="openDialog('dialog2')">
+    <div class="table-action">
+      <md-button class="md-icon-button md-raised md-accent" id="add-note" @click.native="openDialog('dialog')">
         <md-icon>note_add</md-icon>
       </md-button>
-      <md-button class="md-fab md-primary md-mini md-clean">
+      <md-button class="md-icon-button md-raised md-warn">
         <md-icon>email</md-icon>
       </md-button>
-    </md-speed-dial>
-    <md-dialog md-open-from="#fab" md-close-to="#fab" ref="dialog2">
+    </div>
+    <md-dialog md-open-from="#add-note" md-close-to="#add-note" ref="dialog">
       <md-dialog-title>创建新项目</md-dialog-title>
       <md-dialog-content>
         <form>
@@ -52,8 +61,8 @@
         </form>
       </md-dialog-content>
       <md-dialog-actions>
-        <md-button class="md-primary" @click.native="closeDialog('dialog2')">取消</md-button>
-        <md-button class="md-primary" @click.native="closeDialog('dialog2')">确认</md-button>
+        <md-button class="md-primary" @click.native="closeDialog('dialog')">取消</md-button>
+        <md-button class="md-primary" @click.native="closeDialog('dialog')">确认</md-button>
       </md-dialog-actions>
     </md-dialog>
   </md-table-card>
@@ -171,12 +180,24 @@ export default {
 }
 
 .project-row {
+  position: relative;
   &[completed] {
     background-color: #efefef;
   }
 }
 
-.table-actions.md-fab-bottom-left {
-  bottom: 8px;
+.md-table .project-action .md-icon-button .md-icon {
+  width: 24px;
+  min-width: 24px;
+  height: 24px;
+  min-height: 24px;
+  font-size: 24px;
+  margin: auto;
+}
+
+.table-action {
+  position: absolute;
+  top: -53px;
+  right: 12px;
 }
 </style>
