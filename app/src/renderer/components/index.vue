@@ -1,5 +1,6 @@
 <template>
   <md-table-card>
+    <!-- 表格 start -->
     <md-table>
       <md-table-header>
         <md-table-row>
@@ -23,7 +24,7 @@
                   <md-icon>{{row.completed ? 'clear': 'done'}}</md-icon>
                   <span>{{row.completed ? '取消': '完成'}}</span>
                 </md-menu-item>
-                <md-menu-item>
+                <md-menu-item @click.native="openDialog('dialog', 'edit', row)">
                   <md-icon>mode_edit</md-icon>
                   <span>编辑</span>
                 </md-menu-item>
@@ -33,38 +34,49 @@
         </md-table-row>
       </md-table-body>
     </md-table>
+    <!-- 表格 end -->
+    <!-- 分页 start -->
     <md-table-pagination md-size="10" :md-total="taskNum" :md-page="page" md-label="Rows" md-separator="of" :md-page-options="false" @pagination="onPagination"></md-table-pagination>
+    <!-- 分页 end -->
+    <!-- 功能按钮 start -->
     <div class="table-action">
-      <md-button class="md-icon-button md-raised md-accent" id="add-note" @click.native="openDialog('dialog')">
+      <md-button class="md-icon-button md-raised md-accent" @click.native="openDialog('dialog', 'new')">
         <md-icon>note_add</md-icon>
       </md-button>
       <md-button class="md-icon-button md-raised md-warn">
         <md-icon>email</md-icon>
       </md-button>
     </div>
-    <md-dialog md-open-from="#add-note" md-close-to="#add-note" ref="dialog">
+    <!-- 功能按钮 end -->
+    <!-- 对话框 start -->
+    <md-dialog ref="dialog">
       <md-dialog-title>创建新项目</md-dialog-title>
       <md-dialog-content>
         <form>
           <md-input-container>
             <label>项目名称</label>
-            <md-input></md-input>
+            <md-input v-model="dialogData.name"></md-input>
           </md-input-container>
           <md-input-container>
             <label>版本</label>
-            <md-input></md-input>
+            <md-input v-model="dialogData.version"></md-input>
+          </md-input-container>
+          <md-input-container>
+            <label>进度</label>
+            <md-input v-model="dialogData.progress"></md-input>
           </md-input-container>
           <md-input-container>
             <label>备注</label>
-            <md-textarea></md-textarea>
+            <md-textarea v-model="dialogData.remarks"></md-textarea>
           </md-input-container>
         </form>
       </md-dialog-content>
       <md-dialog-actions>
         <md-button class="md-primary" @click.native="closeDialog('dialog')">取消</md-button>
-        <md-button class="md-primary" @click.native="closeDialog('dialog')">确认</md-button>
+        <md-button class="md-primary" @click.native="confirmDialog('dialog')">确认</md-button>
       </md-dialog-actions>
     </md-dialog>
+    <!-- 对话框 end -->
   </md-table-card>
 </template>
 <script>
@@ -77,6 +89,15 @@ export default {
     return {
       page: 1,
       size: 10,
+      dialogState: '',
+      dialogTid: '',
+      dialogData: {
+        name: '',
+        version: '',
+        progress: '',
+        remarks: '',
+        lastModified: 0
+      },
       th: [{
         name: '项目',
         width: 150
@@ -136,10 +157,53 @@ export default {
         }
       })
     },
-    openDialog (ref) {
+    openDialog (ref, state, data) {
+      this.dialogState = state
+      switch (state) {
+        case 'new':
+          this.dialogTid = new Date().getTime()
+          this.dialogData.name = ''
+          this.dialogData.version = ''
+          this.dialogData.progress = ''
+          this.dialogData.remarks = ''
+          break
+        case 'edit':
+          this.dialogTid = data.tid
+          this.dialogData.name = data.name
+          this.dialogData.version = data.version
+          this.dialogData.progress = data.progress
+          this.dialogData.remarks = data.remarks
+          break
+        default:
+          break
+      }
       this.$refs[ref].open()
     },
     closeDialog (ref) {
+      this.$refs[ref].close()
+    },
+    confirmDialog (ref) {
+      this.dialogData.lastModified = new Date().getTime()
+      const state = this.dialogState
+      const dialogData = this.dialogData
+      const tid = this.dialogTid
+
+      switch (state) {
+        case 'new':
+          this.$store.dispatch('addProject', {
+            tid,
+            data: dialogData
+          })
+          break
+        case 'edit':
+          this.$store.dispatch('updateProject', {
+            tid,
+            newData: dialogData
+          })
+          break
+        default:
+          break
+      }
       this.$refs[ref].close()
     }
   }

@@ -68,6 +68,16 @@ const mutations = {
       project,
       ...projects.slice(index + 1)
     ]
+  },
+  [types.ADD_PROJECT] (state, data) {
+    const temp = data.data
+    temp.tid = data.tid
+    temp.completed = false
+
+    state.projects = [
+      temp,
+      ...state.projects
+    ]
   }
 }
 
