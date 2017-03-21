@@ -8,7 +8,7 @@
         </md-table-row>
       </md-table-header>
       <md-table-body>
-        <md-table-row v-for="(row, index) in projects" :key="index" :completed="row.completed" class="project-row">
+        <md-table-row v-for="(row, index) in projectList" :key="index" :completed="row.completed" class="project-row">
           <md-table-cell>{{row.name}}</md-table-cell>
           <md-table-cell>{{row.version}}</md-table-cell>
           <md-table-cell>{{row.progress}}</md-table-cell>
@@ -36,7 +36,7 @@
     </md-table>
     <!-- 表格 end -->
     <!-- 分页 start -->
-    <md-table-pagination md-size="10" :md-total="taskNum" :md-page="page" md-label="Rows" md-separator="of" :md-page-options="false" @pagination="onPagination"></md-table-pagination>
+    <md-table-pagination :md-size="5" :md-total="taskNum" :md-page="page" md-label="Rows" md-separator="of" :md-page-options="[5, 10, 25, 50]" @pagination="onPagination"></md-table-pagination>
     <!-- 分页 end -->
     <!-- 功能按钮 start -->
     <div class="table-action">
@@ -88,15 +88,14 @@ export default {
   data () {
     return {
       page: 1,
-      size: 10,
+      size: 5,
       dialogState: '',
       dialogTid: '',
       dialogData: {
         name: '',
         version: '',
         progress: '',
-        remarks: '',
-        lastModified: 0
+        remarks: ''
       },
       th: [{
         name: '项目',
@@ -123,7 +122,7 @@ export default {
     taskNum () {
       return this.projects.length
     },
-    projects () {
+    projectList () {
       const size = this.size
       const page = this.page
       const start = size * (page - 1)
@@ -183,8 +182,6 @@ export default {
       this.$refs[ref].close()
     },
     confirmDialog (ref) {
-      this.dialogData.lastModified = new Date().getTime()
-      const state = this.dialogState
       const dialogData = this.dialogData
       const tid = this.dialogTid
       const data = {}
@@ -192,9 +189,9 @@ export default {
       data.version = dialogData.version
       data.progress = dialogData.progress
       data.remarks = dialogData.remarks
-      data.lastModified = dialogData.lastModified
+      data.lastModified = new Date().getTime()
 
-      switch (state) {
+      switch (this.dialogState) {
         case 'new':
           this.$store.dispatch('addProject', {
             tid,

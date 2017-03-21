@@ -34,6 +34,46 @@ const state = {
     completed: false,
     lastModified: 1489906513106
   }, {
+    tid: 100000000002,
+    name: '项目1',
+    version: 'v5.8.6',
+    progress: '100%',
+    remarks: '',
+    completed: false,
+    lastModified: 1489906513106
+  }, {
+    tid: 100000000004,
+    name: '项目1',
+    version: 'v5.8.6',
+    progress: '100%',
+    remarks: '',
+    completed: false,
+    lastModified: 1489906513106
+  }, {
+    tid: 100000000000,
+    name: '项目1',
+    version: 'v5.8.6',
+    progress: '100%',
+    remarks: '由于bugfix，项目delay',
+    completed: false,
+    lastModified: 1489906513106
+  }, {
+    tid: 100000000001,
+    name: '项目1',
+    version: 'v5.8.6',
+    progress: '100%',
+    remarks: '',
+    completed: false,
+    lastModified: 1489906513106
+  }, {
+    tid: 100000000003,
+    name: '项目1',
+    version: 'v5.8.6',
+    progress: '100%',
+    remarks: '',
+    completed: false,
+    lastModified: 1489906513106
+  }, {
     tid: 100000000004,
     name: '项目1',
     version: 'v5.8.6',
