@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer'
-import { server, mailOptions } from './config.mail'
+import { server, mailOptions, metas } from './config.mail'
+import { style } from './style.json'
 
 const transporter = nodemailer.createTransport(server)
 
@@ -10,7 +11,7 @@ const transporter = nodemailer.createTransport(server)
  * @param  {Function} cb
  */
 export default function (data, cb) {
-  mailOptions['html'] = genTable(data)
+  mailOptions['html'] = genHtml(data)
   // 发送邮件
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -23,6 +24,20 @@ export default function (data, cb) {
       info
     })
   })
+}
+
+/**
+ * 生成邮件正文
+ */
+function genHtml (data) {
+  const regards = 'Dear All:'
+  const table = genTable(data)
+  const _metas = metas.map((item) => `<p class="regards-item">${item}</p>`).join('')
+
+  return `<style type="text/css">${style}</style>` +
+    regards +
+    table +
+    _metas
 }
 
 /**
@@ -49,10 +64,12 @@ function genTable (list) {
       `<td>${item.progress}</td>` +
       `<td>${item.remarks}</td>` +
       '</tr>'
-    ) +
+    ).join('') +
     '</tbody>'
 
-  return '<table>' +
+  return '<table ' +
+    'class="table table-bordered table-hover table-striped" ' +
+    'style="width: 600px">' +
     thead +
     tbody +
     '</table>'
