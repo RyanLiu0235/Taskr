@@ -1,6 +1,5 @@
-'use strict'
-
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
+import mailer from './mail'
 
 let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
@@ -22,8 +21,11 @@ function createWindow () {
     mainWindow = null
   })
 
-  // eslint-disable-next-line no-console
-  console.log('mainWindow opened')
+  ipcMain.on('sendMail', (e, data) => {
+    mailer(data, (info) => {
+      e.sender.send('mailResult', info)
+    })
+  })
 }
 
 app.on('ready', createWindow)

@@ -13,7 +13,16 @@
           <md-table-cell>{{row.version}}</md-table-cell>
           <md-table-cell>{{row.progress}}</md-table-cell>
           <md-table-cell>{{row.remarks}}</md-table-cell>
-          <md-table-cell>{{row.lastModified | formatTime}}</md-table-cell>
+          <md-table-cell>
+            <span>
+              {{row.createdAt | getDate}}
+              <md-tooltip md-delay="1000" md-direction="bottom">{{row.createdAt | getTime}}</md-tooltip>
+            </span> -
+            <span>
+              {{row.lastModified | getDate}}
+              <md-tooltip md-delay="1000" md-direction="bottom">{{row.lastModified | getTime}}</md-tooltip>
+            </span>
+          </md-table-cell>
           <md-table-cell class="project-action">
             <md-menu md-size="3">
               <md-button class="md-icon-button" md-menu-trigger>
@@ -42,9 +51,11 @@
     <div class="table-action">
       <md-button class="md-icon-button md-raised md-accent" @click.native="openDialog('dialog', 'new')">
         <md-icon>note_add</md-icon>
+        <md-tooltip md-delay="400" md-direction="bottom">添加任务</md-tooltip>
       </md-button>
-      <md-button class="md-icon-button md-raised md-warn">
+      <md-button class="md-icon-button md-raised md-warn" @click.native="sendMail">
         <md-icon>email</md-icon>
+        <md-tooltip md-delay="400" md-direction="bottom">发送邮件</md-tooltip>
       </md-button>
     </div>
     <!-- 功能按钮 end -->
@@ -77,6 +88,33 @@
       </md-dialog-actions>
     </md-dialog>
     <!-- 对话框 end -->
+    <!-- 发送邮件对话框 start -->
+    <md-dialog ref="dialog-mail" class="dialog-mail">
+      <md-dialog-title>{{dialogMailTitle}}</md-dialog-title>
+      <template v-if="mailNotify">
+        <md-dialog-content>
+          <div v-if="mailResult.accepted.count > 0">
+            <p>发送成功：</p>
+            <p v-for="accepter in mailResult.accepted.detail">{{accepter}}</p>
+          </div>
+          <div v-if="mailResult.rejected.count > 0">
+            <p>发送失败：</p>
+            <p v-for="rejecter in mailResult.rejected.detail">{{rejecter}}</p>
+          </div>
+        </md-dialog-content>
+        <md-dialog-actions>
+          <md-button class="md-primary" @click.native="closeDialog('dialog-mail')">确认</md-button>
+        </md-dialog-actions>
+      </template>
+      <md-spinner :md-size="60" md-indeterminate class="md-accent" v-else></md-spinner>
+    </md-dialog>
+    <!-- 发送邮件对话框 end -->
+    <!-- 小提示 start -->
+    <md-snackbar md-position="bottom center" ref="snackbar" :md-duration="2000">
+      <span>{{dialogState === 'new' ? '新增' : '编辑'}}任务成功</span>
+      <md-button class="md-accent" md-theme="light-blue" @click.native="$refs.snackbar.close()">关闭</md-button>
+    </md-snackbar>
+    <!-- 小提示 end -->
   </md-table-card>
 </template>
 <script>
@@ -110,7 +148,7 @@ export default {
         name: '备注',
         width: 240
       }, {
-        name: '最后操作时间',
+        name: '创建/最后操作时间',
         width: 125
       }, {
         name: '操作',
@@ -130,13 +168,27 @@ export default {
 
       return this.projects.slice(start, end)
     },
+    dialogMailTitle () {
+      let title = '发送'
+
+      if (this.mailNotify) {
+        title += this.mailSuccess ? '成功' : '失败'
+      } else {
+        title += '中'
+      }
+
+      return title
+    },
     ...mapGetters([
-      'projects'
+      'projects', 'mailNotify', 'mailSuccess', 'mailResult'
     ])
   },
   filters: {
-    formatTime (time) {
-      return new Date(time).toLocaleString()
+    getDate (time) {
+      return new Date(time).toLocaleDateString()
+    },
+    getTime (time) {
+      return new Date(time).toLocaleTimeString()
     }
   },
   methods: {
@@ -182,6 +234,7 @@ export default {
       this.$refs[ref].close()
     },
     confirmDialog (ref) {
+      const state = this.dialogState
       const dialogData = this.dialogData
       const tid = this.dialogTid
       const data = {}
@@ -191,8 +244,9 @@ export default {
       data.remarks = dialogData.remarks
       data.lastModified = new Date().getTime()
 
-      switch (this.dialogState) {
+      switch (state) {
         case 'new':
+          data.createdAt = data.lastModified
           this.$store.dispatch('addProject', {
             tid,
             data
@@ -208,6 +262,13 @@ export default {
           break
       }
       this.$refs[ref].close()
+      this.$refs.snackbar.open()
+    },
+    sendMail () {
+      this.$store.dispatch('sendMail', {
+        data: this.projects
+      })
+      this.$refs['dialog-mail'].open()
     }
   }
 }
@@ -237,5 +298,11 @@ export default {
   position: absolute;
   top: -53px;
   right: 12px;
+}
+
+.dialog-mail {
+  .md-spinner {
+    margin: 0 auto;
+  }
 }
 </style>

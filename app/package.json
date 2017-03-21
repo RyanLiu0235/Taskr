@@ -4,6 +4,7 @@
   "description": "An electron-vue project",
   "main": "./dist/main.js",
   "dependencies": {
+    "nodemailer": "^3.1.8",
     "vue": "^2.1.10",
     "vue-electron": "^1.0.6",
     "vue-material": "^0.7.1",
