@@ -187,18 +187,24 @@ export default {
       const state = this.dialogState
       const dialogData = this.dialogData
       const tid = this.dialogTid
+      const data = {}
+      data.name = dialogData.name
+      data.version = dialogData.version
+      data.progress = dialogData.progress
+      data.remarks = dialogData.remarks
+      data.lastModified = dialogData.lastModified
 
       switch (state) {
         case 'new':
           this.$store.dispatch('addProject', {
             tid,
-            data: dialogData
+            data
           })
           break
         case 'edit':
           this.$store.dispatch('updateProject', {
             tid,
-            newData: dialogData
+            newData: data
           })
           break
         default:
