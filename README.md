@@ -1,6 +1,11 @@
-# taskr
+# Tasker
 
-> An electron-vue project
+> 你可以单纯地将**Tasker**当做一个本地任务管理软件，也可以用他来整理、发送周报。
+
+## Features
+
+* 本地任务管理
+* 自动整理、发送周报，支持自定义邮件meta信息
 
 ## Build Setup
 
@@ -20,8 +25,3 @@ npm run lint
 # run webpack in production
 npm run pack
 ```
-More information can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/docs/npm_scripts.html).
-
----
-
-This project was generated from [electron-vue](https://github.com/SimulatedGREG/electron-vue) using [vue-cli](https://github.com/vuejs/vue-cli). Documentation about this project can be found [here](https://simulatedgreg.gitbooks.io/electron-vue/content/index.html).
