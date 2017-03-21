@@ -45,7 +45,7 @@ const state = {
 }
 
 const mutations = {
-  [types.UPDATE_PROJECTS] (state, data) {
+  [types.UPDATE_PROJECT] (state, data) {
     const tid = data.tid
     const newData = data.newData
     const projects = state.projects

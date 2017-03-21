@@ -129,7 +129,7 @@ export default {
       const index = project.findIndex((item) => item.tid === tid)
       const completed = project[index].completed
 
-      this.$store.dispatch('updateProjects', {
+      this.$store.dispatch('updateProject', {
         tid,
         newData: {
           completed: !completed
