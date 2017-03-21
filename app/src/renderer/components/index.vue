@@ -235,7 +235,9 @@ export default {
     },
     closeDialog (ref) {
       if (ref === 'dialog-mail') {
-        this.$store.dispatch('resetMail')
+        this.$store.dispatch('resetMail', {
+          projects: this.projectList
+        })
       }
       this.$refs[ref].close()
     },
