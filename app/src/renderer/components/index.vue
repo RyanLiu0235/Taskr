@@ -68,6 +68,9 @@
   </md-table-card>
 </template>
 <script>
+import {
+  mapGetters
+} from 'vuex'
 export default {
   name: 'index-page',
   data () {
@@ -92,53 +95,12 @@ export default {
       }, {
         name: '操作',
         width: 85
-      }],
-      project: [{
-        tid: 100000000000,
-        name: '项目1啊啊啊啊啊啊项目1啊啊啊啊啊啊',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '了；啊是建档立卡就算了大富科技啊是了；啊是建档',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000001,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000002,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000003,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
-      }, {
-        tid: 100000000004,
-        name: '项目1',
-        version: 'v5.8.6',
-        progress: '100%',
-        remarks: '',
-        completed: false,
-        lastModified: 1489906513106
       }]
     }
   },
   computed: {
     taskNum () {
-      return this.project.length
+      return this.projects.length
     },
     projects () {
       const size = this.size
@@ -146,8 +108,11 @@ export default {
       const start = size * (page - 1)
       const end = size * page
 
-      return this.project.slice(start, end)
-    }
+      return this.projects.slice(start, end)
+    },
+    ...mapGetters([
+      'projects'
+    ])
   },
   filters: {
     formatTime (time) {
@@ -160,10 +125,16 @@ export default {
       this.size = arg.size
     },
     toggleTask (tid) {
-      const project = this.project
+      const project = this.projects
       const index = project.findIndex((item) => item.tid === tid)
       const completed = project[index].completed
-      this.project[index].completed = !completed
+
+      this.$store.dispatch('updateProjects', {
+        tid,
+        newData: {
+          completed: !completed
+        }
+      })
     },
     openDialog (ref) {
       this.$refs[ref].open()
