@@ -6,6 +6,9 @@ const state = {
 }
 
 const mutations = {
+  [types.GET_PROJECTS] (state, data) {
+    state.projects = data
+  },
   [types.UPDATE_PROJECT] (state, data) {
     const tid = data.tid
     const newData = data.newData

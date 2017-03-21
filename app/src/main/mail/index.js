@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport(server)
  * @param  {Function} cb
  */
 export default function (data, cb) {
-  mailOptions['html'] = genHtml(data)
+  mailOptions.html = genHtml(data)
   // 发送邮件
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {

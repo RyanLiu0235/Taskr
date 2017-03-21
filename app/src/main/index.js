@@ -3,7 +3,6 @@ import mailer from './mail'
 import { storeTasks, getTasks } from './store'
 
 let mainWindow
-let tasks
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:${require('../../../config').port}`
   : `file://${__dirname}/index.html`
@@ -24,10 +23,9 @@ function createWindow () {
   })
 
   ipcMain.on('getTasks', (e, data) => {
-    // 获取本地的任务
-    tasks = getTasks()
-
-    e.sender.send('tasksResult', tasks)
+    getTasks((data) => {
+      e.sender.send('tasksResult', data)
+    })
   })
 
   // 发送邮件事件

@@ -1,6 +1,13 @@
 import * as types from './mutation-types'
 import { ipcRenderer } from 'electron'
 
+export const getProjects = ({ commit }) => {
+  ipcRenderer.send('getTasks')
+  ipcRenderer.on('tasksResult', (e, rst) => {
+    commit(types.GET_PROJECTS, JSON.parse(rst.data).projects)
+  })
+}
+
 export const updateProject = ({ commit }, data) => {
   commit(types.UPDATE_PROJECT, data)
 }

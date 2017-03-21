@@ -12,17 +12,17 @@ export const storeTasks = function (data, cb) {
   })
 }
 
-export const getTasks = function () {
+export const getTasks = function (cb) {
   fs.readFile('./store.json', 'utf8', (err, data) => {
     if (err) {
-      return {
+      return cb({
         status: false,
         data: err
-      }
+      })
     }
-    return {
+    return cb({
       status: true,
       data
-    }
+    })
   })
 }

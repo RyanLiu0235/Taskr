@@ -43,6 +43,9 @@ export default {
       }]
     }
   },
+  mounted () {
+    this.$store.dispatch('getProjects')
+  },
   methods: {
     toggleLeftSidenav () {
       this.$refs.leftSidenav.toggle()
