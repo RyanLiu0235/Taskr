@@ -21,6 +21,6 @@ export const metas = [
   '----------------------',
   'Yours Sincerely',
   'John Deo',
-  'Mobile : 13000000000',
-  'E-mail : johndoe@xx.com'
+  'Mobile: 13000000000',
+  'E-mail: johndoe@xx.com'
 ]
