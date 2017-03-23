@@ -13,6 +13,8 @@ const transporter = nodemailer.createTransport(server)
 export default function (data, cb) {
   mailOptions.html = genHtml(data)
   // 发送邮件
+  // 具体接口数据格式
+  // https://nodemailer.com/usage/#sending-mail
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       return cb({
