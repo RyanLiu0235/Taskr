@@ -6,7 +6,7 @@ export const getProjects = ({ commit }) => {
   ipcRenderer.on('tasksResult', (e, rst) => {
     let projects
     if (rst.status && !!rst.data) {
-      projects = JSON.parse(rst.data).projects
+      projects = rst.data.projects
     } else {
       projects = []
     }
