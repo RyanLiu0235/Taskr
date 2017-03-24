@@ -1,8 +1,9 @@
 import nodemailer from 'nodemailer'
-import { server, mailOptions, metas } from './config.mail'
+// import { server, mailOptions, metas } from './config.mail'
 import { style } from './style.json'
+import { get } from '../store'
 
-const transporter = nodemailer.createTransport(server)
+let setting = {}
 
 /**
  * 整理、发送邮件
@@ -11,20 +12,28 @@ const transporter = nodemailer.createTransport(server)
  * @param  {Function} cb
  */
 export default function (data, cb) {
-  mailOptions.html = genHtml(data)
-  // 发送邮件
-  // 具体接口数据格式
-  // https://nodemailer.com/usage/#sending-mail
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return cb({
-        status: false
+  get('setting', (info) => {
+    if (info.status) {
+      setting = info.data
+      const transporter = nodemailer.createTransport(setting.server)
+      let mailOptions = setting.mailOptions
+      mailOptions.html = genHtml(data)
+
+      // 发送邮件
+      // 具体接口数据格式
+      // https://nodemailer.com/usage/#sending-mail
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return cb({
+            status: false
+          })
+        }
+        return cb({
+          status: true,
+          info
+        })
       })
     }
-    return cb({
-      status: true,
-      info
-    })
   })
 }
 
@@ -34,7 +43,7 @@ export default function (data, cb) {
 function genHtml (data) {
   const regards = 'Dear All:'
   const table = genTable(data)
-  const _metas = metas.map((item) => `<p class="regards-item">${item}</p>`).join('')
+  const _metas = setting.metas.split('\n').map((item) => `<p class="regards-item">${item}</p>`).join('')
 
   return `<style type="text/css">${style}</style>` +
     regards +

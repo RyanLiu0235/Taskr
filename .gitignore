@@ -8,3 +8,4 @@ thumbs.db
 !.gitkeep
 config.mail.js
 store.json
+data/*

@@ -39,6 +39,14 @@ export const resetMail = ({ commit }) => {
   commit(types.RESET_MAIL)
 }
 
+export const saveSetting = ({ commit }, data) => {
+  ipcRenderer.send('saveSetting', data)
+
+  ipcRenderer.on('saveResult', (e, rst) => {
+    commit(types.SAVE_SETTING, rst)
+  })
+}
+
 /**
  * 获取本周更新的任务/未完成的任务
  *
