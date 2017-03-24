@@ -14,6 +14,7 @@ const state = {
     cc: '', // 抄送
     subject: '' // 标题
   },
+  metas: '',
   state: {
     save: false,
     get: false
@@ -25,7 +26,10 @@ const mutations = {
     state.state.save = data
   },
   [types.GET_SETTING] (state, data) {
-    state.state.get = data
+    state.state.get = data.status
+    state.server = data.server
+    state.mailOptions = data.mailOptions
+    state.metas = data.metas
   }
 }
 
