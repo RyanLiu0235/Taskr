@@ -12,7 +12,7 @@ const path = {
  * @param  {Function} cb
  */
 export const save = function (data, type, cb) {
-  fs.writeFile(`${storePath}${path[type]}`, JSON.stringify(data), (err) => {
+  fs.writeFile(`${storePath}${path[type]}`, window.JSON.stringify(data), (err) => {
     if (err) {
       return cb({
         status: false,
@@ -36,7 +36,7 @@ export const get = function (type, cb) {
         data: err
       })
     }
-    data = JSON.parse(data)
+    data = window.JSON.parse(data)
     return cb({
       status: true,
       data
