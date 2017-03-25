@@ -1,13 +1,71 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu } from 'electron'
 import mailer from './mail'
 import { save, get } from './store'
 
 let mainWindow
-const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:${require('../../../config').port}`
-  : `file://${__dirname}/index.html`
+const winURL = process.env.NODE_ENV === 'development' ?
+  `http://localhost:${require('../../../config').port}` :
+  `file://${__dirname}/index.html`
 
-function createWindow () {
+
+const template = [{
+  label: 'Edit',
+  submenu: [{
+    role: 'undo'
+  }, {
+    role: 'redo'
+  }, {
+    type: 'separator'
+  }, {
+    role: 'cut'
+  }, {
+    role: 'copy'
+  }, {
+    role: 'paste'
+  }, {
+    role: 'pasteandmatchstyle'
+  }, {
+    role: 'delete'
+  }, {
+    role: 'selectall'
+  }]
+}, {
+  label: 'View',
+  submenu: [{
+    role: 'reload'
+  }, {
+    role: 'forcereload'
+  }, {
+    role: 'toggledevtools'
+  }, {
+    type: 'separator'
+  }, {
+    role: 'resetzoom'
+  }, {
+    role: 'zoomin'
+  }, {
+    role: 'zoomout'
+  }, {
+    type: 'separator'
+  }, {
+    role: 'togglefullscreen'
+  }]
+}, {
+  role: 'window',
+  submenu: [{
+    role: 'minimize'
+  }, {
+    role: 'close'
+  }]
+}, {
+  role: 'help',
+  submenu: [{
+    label: 'Learn More',
+    click() { require('electron').shell.openExternal('http://electron.atom.io') }
+  }]
+}]
+
+function createWindow() {
   /**
    * Initial window options
    */
@@ -21,6 +79,9 @@ function createWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+
+  // 注册菜单
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
   ipcMain.on('getTasks', (e, data) => {
     get('task', (data) => {
