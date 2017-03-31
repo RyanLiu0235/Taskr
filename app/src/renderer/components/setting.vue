@@ -38,12 +38,17 @@
       </md-input-container>
       <md-button class="md-raised md-primary" @click.native="submitSetting">提交</md-button>
     </form>
-    <!-- 小提示 start -->
-    <md-snackbar md-position="bottom center" ref="snackbar" :md-duration="2000">
-      <span>添加成功</span>
-      <md-button class="md-accent" md-theme="light-blue" @click.native="$refs.snackbar.close()">关闭</md-button>
-    </md-snackbar>
-    <!-- 小提示 end -->
+    <!-- 弹窗提示 start -->
+    <md-dialog ref="save-success" class="save-success">
+      <md-dialog-title>添加成功</md-dialog-title>
+      <md-dialog-content>
+        <p>设置添加成功</p>
+      </md-dialog-content>
+      <md-dialog-actions>
+        <md-button class="md-primary" @click.native="closeDialog('save-success')">确认</md-button>
+      </md-dialog-actions>
+    </md-dialog>
+    <!-- 弹窗提示 end -->
   </div>
 </template>
 <script>
@@ -78,7 +83,7 @@ export default {
   watch: {
     settingSave: function (val) {
       if (val) {
-        this.$refs.snackbar.open()
+        this.$refs['save-success'].open()
       }
     }
   },
@@ -88,6 +93,12 @@ export default {
         server: this.server,
         mailOptions: this.mailOptions,
         metas: this.metas
+      })
+    },
+    closeDialog (ref) {
+      this.$refs['save-success'].close()
+      this.$router.push({
+        name: 'index-page'
       })
     }
   }
