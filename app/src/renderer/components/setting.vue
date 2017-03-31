@@ -38,9 +38,18 @@
       </md-input-container>
       <md-button class="md-raised md-primary" @click.native="submitSetting">提交</md-button>
     </form>
+    <!-- 小提示 start -->
+    <md-snackbar md-position="bottom center" ref="snackbar" :md-duration="2000">
+      <span>添加成功</span>
+      <md-button class="md-accent" md-theme="light-blue" @click.native="$refs.snackbar.close()">关闭</md-button>
+    </md-snackbar>
+    <!-- 小提示 end -->
   </div>
 </template>
 <script>
+import {
+  mapGetters
+} from 'vuex'
 export default {
   name: 'setting-page',
   data () {
@@ -59,6 +68,18 @@ export default {
         subject: '' // 标题
       },
       metas: ''
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'settingSave', 'settingGet'
+    ])
+  },
+  watch: {
+    settingSave: (val) => {
+      if (val) {
+        this.$refs.snackbar.open()
+      }
     }
   },
   methods: {
