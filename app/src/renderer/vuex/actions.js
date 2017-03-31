@@ -4,13 +4,7 @@ import { ipcRenderer } from 'electron'
 export const getProjects = ({ commit }) => {
   ipcRenderer.send('getTasks')
   ipcRenderer.on('tasksResult', (e, rst) => {
-    let projects
-    if (rst.status && !!rst.data) {
-      projects = rst.data.projects
-    } else {
-      projects = []
-    }
-    commit(types.GET_PROJECTS, projects)
+    commit(types.GET_PROJECTS, rst.projects)
   })
 }
 

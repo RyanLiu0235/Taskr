@@ -1,8 +1,8 @@
 import nodemailer from 'nodemailer'
-// import { server, mailOptions, metas } from './config.mail'
 import { style } from './style.json'
-import { get } from '../store'
+import Config from 'electron-config'
 
+const config = new Config()
 let setting = {}
 
 /**
@@ -12,28 +12,25 @@ let setting = {}
  * @param  {Function} cb
  */
 export default function (data, cb) {
-  get('setting', (info) => {
-    if (info.status) {
-      setting = info.data
-      const transporter = nodemailer.createTransport(setting.server)
-      let mailOptions = setting.mailOptions
-      mailOptions.html = genHtml(data)
+  setting = config.get('setting')
 
-      // 发送邮件
-      // 具体接口数据格式
-      // https://nodemailer.com/usage/#sending-mail
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          return cb({
-            status: false
-          })
-        }
-        return cb({
-          status: true,
-          info
-        })
+  const transporter = nodemailer.createTransport(setting.server)
+  let mailOptions = setting.mailOptions
+  mailOptions.html = genHtml(data)
+
+  // 发送邮件
+  // 具体接口数据格式
+  // https://nodemailer.com/usage/#sending-mail
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return cb({
+        status: false
       })
     }
+    return cb({
+      status: true,
+      info
+    })
   })
 }
 

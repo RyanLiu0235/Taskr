@@ -1,12 +1,13 @@
 import { app, BrowserWindow, ipcMain, Menu } from 'electron'
 import mailer from './mail'
-import { save, get } from './store'
+import Config from 'electron-config'
+
+const config = new Config()
 
 let mainWindow
-const winURL = process.env.NODE_ENV === 'development' ?
-  `http://localhost:${require('../../../config').port}` :
-  `file://${__dirname}/index.html`
-
+const winURL = process.env.NODE_ENV === 'development'
+  ? `http://localhost:${require('../../../config').port}`
+  : `file://${__dirname}/index.html`
 
 const template = [{
   label: 'Edit',
@@ -61,11 +62,11 @@ const template = [{
   role: 'help',
   submenu: [{
     label: 'Learn More',
-    click() { require('electron').shell.openExternal('http://electron.atom.io') }
+    click () { require('electron').shell.openExternal('http://electron.atom.io') }
   }]
 }]
 
-function createWindow() {
+function createWindow () {
   /**
    * Initial window options
    */
@@ -84,9 +85,7 @@ function createWindow() {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
   ipcMain.on('getTasks', (e, data) => {
-    get('task', (data) => {
-      e.sender.send('tasksResult', data)
-    })
+    e.sender.send('tasksResult', config.get('task') || [])
   })
 
   // 发送邮件事件
@@ -98,15 +97,17 @@ function createWindow() {
 
   // 更新本地task记录事件
   ipcMain.on('updateProjects', (e, data) => {
-    save(data, 'task', (info) => {
-      e.sender.send('projectResult', info)
+    config.set('task', data)
+    e.sender.send('projectResult', {
+      status: true
     })
   })
 
   // 存储配置项
   ipcMain.on('saveSetting', (e, data) => {
-    save(data, 'setting', (info) => {
-      e.sender.send('saveResult', info)
+    config.set('setting', data)
+    e.sender.send('saveResult', {
+      status: true
     })
   })
 }
