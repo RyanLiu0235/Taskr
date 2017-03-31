@@ -5,9 +5,7 @@ import Config from 'electron-config'
 const config = new Config()
 
 let mainWindow
-const winURL = process.env.NODE_ENV === 'development'
-  ? `http://localhost:${require('../../../config').port}`
-  : `file://${__dirname}/index.html`
+const winURL = process.env.NODE_ENV === 'development' ? `http://localhost:${require('../../../config').port}` : `file://${__dirname}/index.html`
 
 const template = [{
   label: 'Edit',
@@ -85,7 +83,7 @@ function createWindow () {
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
 
   ipcMain.on('getTasks', (e, data) => {
-    e.sender.send('tasksResult', config.get('task') || [])
+    e.sender.send('tasksResult', config.get('task') || { projects: [] })
   })
 
   // 发送邮件事件
@@ -99,7 +97,8 @@ function createWindow () {
   ipcMain.on('updateProjects', (e, data) => {
     config.set('task', data)
     e.sender.send('projectResult', {
-      status: true
+      status: true,
+      data: '任务保存成功'
     })
   })
 
