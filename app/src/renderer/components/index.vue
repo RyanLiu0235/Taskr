@@ -173,9 +173,6 @@ export default {
   },
   mounted () {
     ipcRenderer.on('projectResult', (e, rst) => {
-      // eslint-disable-next-line no-console
-      console.log(rst)
-
       if (!rst.status) {
         this.alertData.content = rst.data
         this.$refs['alert-save'].open()

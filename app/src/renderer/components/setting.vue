@@ -76,7 +76,7 @@ export default {
     ])
   },
   watch: {
-    settingSave: (val) => {
+    settingSave: function (val) {
       if (val) {
         this.$refs.snackbar.open()
       }
